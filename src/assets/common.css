@@ -1,0 +1,33 @@
+.content{
+    padding: 20px 0 0;
+}
+
+.pagination{
+    text-align: center;
+    padding: 20px;
+}
+
+.formSelect .el-select{
+    width: 300px;
+}
+
+.adFile{
+    display: inline-block;
+    background: #409EFF;
+    padding: 12px 20px;
+    line-height: normal;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.adFile input{
+    display: none;
+}
+
+.el-table .cell img{
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto;
+}
