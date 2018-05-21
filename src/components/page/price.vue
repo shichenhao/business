@@ -1,15 +1,25 @@
 <template>
     <div>
         <el-form :inline="true" :model="searchParam" class="demo-form-inline">
-            <el-form-item style="float: right;">
-                <el-button type="primary" icon="el-icon-plus" @click="handleEdit()">新建</el-button>
-            </el-form-item>
+            <el-form style="padding: 0 0 20px">
+                <el-button type="primary" :disabled="!multipleSelection.length" icon="el-icon-news" @click="deleteOrder()">删除</el-button>
+                <el-form-item style="float: right;">
+                    <el-button type="primary" icon="el-icon-plus" @click="handleEdit()">新建</el-button>
+                </el-form-item>
+            </el-form>
         </el-form>
         <el-table
             v-loading="searchLoading"
             :data="tableData && tableData.list || []"
             border
-            style="width: 100%">
+            style="width: 100%"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+                type="selection"
+                width="55"
+                align="center"
+            >
+            </el-table-column>
             <el-table-column
                 label="编号"
                 width="60"
@@ -135,10 +145,12 @@
                 }
             };
             return {
+                loginType:sessionStorage.getItem('loginType')==1 ? true : false,//登录权限 0 代理商 1 管理员
                 dialogFormVisible: false,//新增修改弹窗
                 addLoading:false,//添加loading
                 searchLoading:false,//搜索loading
                 tableData: null,
+                multipleSelection: [],
                 list,
                 searchParam: {},
                 addParam:{
@@ -174,6 +186,11 @@
             }
         },
         methods: {
+            getMerchantName(){ // 获取商户名称
+                this.$axios.post('/express/manageClient/findExpressMerchantDTOList',addToken({agentId:this.searchParam.agentId})).then((res)=>{
+                    window.list.merchantName=res.data.value
+                })
+            },
             addInit(type){ // 创建成功后初始化数据
                 this.dialogFormVisible=type || false;
                 this.addParam={
@@ -201,7 +218,7 @@
                                     type: 'success'
                                 });
                                 this.addInit();
-                                this.onSearch();
+                                this.onSearch(this.searchParam.start/20+1);
                             }else{
                                 this.$message({
                                     message: res.data.message,
@@ -239,6 +256,20 @@
                         this.addParam=res.data.value
                     })
                 }
+            },
+            handleSelectionChange(val) {//选中的数据
+                this.multipleSelection = val;
+            },
+            deleteOrder() {//删除
+                let ids = this.multipleSelection.map(item=> item.id).toString()
+                this.$axios.post('/express/merchantClient/batchRemoveExpressPrice', addToken({ids})).then((res)=>{
+                    if(res.data.success){
+                        this.$message.success('操作成功！');
+                        this.onSearch(this.searchParam.start/20+1);
+                    }
+                }).catch((error)=>{
+                    this.$message.error(error.response.data.message);
+                })
             },
         },
         created(){

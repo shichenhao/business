@@ -74,9 +74,12 @@ String.prototype.filtersOrders=function(state){
             text='待付款'
             break
         case 2:
-            text='待取件'
+            text='待确认'
             break
         case 3:
+            text='待取件'
+            break
+        case 4:
             text='已完成'
             break
         default:
@@ -105,6 +108,12 @@ String.prototype.filtersHasBinding=function(state){
 window.list={
     merchantName:[],//商户名称
     agentName:[],//代理商名称
+    agentNameAdd:[
+        {
+            name:'admin',
+            id:1
+        }
+    ],//管理员代理商名称
     province:[],//省
     city:[],//市
     district:[],//区
@@ -150,11 +159,14 @@ window.list={
         name:'待付款',
         val:1
     }, {
-        name:'待取件',
+        name:'待确认',
         val:2
     }, {
-        name:'已完成',
+        name:'待取件',
         val:3
+    }, {
+        name:'已完成',
+        val:4
     }],
     hasBinding :[{
         name:'是',
@@ -162,6 +174,22 @@ window.list={
     }, {
         name:'否',
         val:0
+    }],
+    bankName :[{
+        name:'中国银行',
+        val:'中国银行'
+    }, {
+        name:'中国工商银行',
+        val:'中国工商银行'
+    }, {
+        name:'中国农业银行',
+        val:'中国农业银行'
+    }, {
+        name:'中国建设银行',
+        val:'中国建设银行'
+    }, {
+        name:'中国邮政储蓄银行',
+        val:'中国邮政储蓄银行'
     }],
     accountType :[{
         name:'公账',
