@@ -100,7 +100,7 @@
     export default {
         data() {
             let dateValidata = (rule, value, callback) => {
-                let reg=/^([0-1][0-9]|[2][0-3]):([0-5][0-9])-([0-1][0-9]|[2][0-3]):([0-5][0-9])$/;
+                let reg=/^([0-1][0-9]|[2][0-3]|[0-9]):([0-5][0-9])-([0-1][0-9]|[2][0-3]|[0-9]):([0-5][0-9])$/;
                 let values = value.split(',')
                 if(!value || value == ''){
                     callback(new Error('请填写取件时段'));
