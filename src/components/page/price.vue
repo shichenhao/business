@@ -144,6 +144,18 @@
                     callback();
                 }
             };
+            let commissionAmtValidata2 = (rule, value, callback) => {
+                let err = rule.field== 'weight' ? '重量' : '价格'
+
+                let reg = /^(?:(?:(?:[1-9]\d{0,2}(?:,\d{3})*)|[1-9]\d*|0))(?:\.\d{1,2})?$/;
+                if(value === ''){
+                    callback(new Error('请填写' + err));
+                }else if(!reg.test(value)){
+                    callback(new Error('请输入正确的' + err));
+                }else{
+                    callback();
+                }
+            };
             return {
                 loginType:sessionStorage.getItem('loginType')==1 ? true : false,//登录权限 0 代理商 1 管理员
                 dialogFormVisible: false,//新增修改弹窗
@@ -173,7 +185,7 @@
                         { required: true, message: '请选收货地区', trigger: 'change' }
                     ],
                     price: [
-                        { required: true, validator: commissionAmtValidata,  trigger: 'change' }
+                        { required: true, validator: commissionAmtValidata2,  trigger: 'change' }
                     ],
                     addPrice: [
                         { required: true, validator: commissionAmtValidata,  trigger: 'change' }
