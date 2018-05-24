@@ -1,23 +1,23 @@
 <template>
     <div>
-        <el-form :inline="true" :model="searchParam" class="demo-form-inline">
-            <el-form-item>
+        <el-form :inline="true" :model="searchParam" class="demo-form-inline" ref="searchParam">
+            <el-form-item prop="orderId">
                 <el-input v-model="searchParam.orderId" placeholder="订单号"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="consignerMobile">
                 <el-input v-model="searchParam.consignerMobile" placeholder="发货人手机号"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="status">
                 <el-select v-model="searchParam.status" placeholder="订单状态">
                     <el-option v-for="item in list.orderStatus" :key="item.val" :label="item.name" :value="item.val"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="paymentState">
                 <el-select v-model="searchParam.paymentState" placeholder="付款状态">
                     <el-option v-for="item in list.hasBinding" :key="item.val" :label="item.name" :value="item.val"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="data">
                 <el-date-picker
                     v-model="searchParam.data"
                     type="daterange"
@@ -32,6 +32,8 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click="onSearch()">查询</el-button>
+                <el-button type="primary" icon="el-icon-menu" @click="calAll()">统计</el-button>
+                <el-button icon="el-icon-refresh" @click="resetForm('searchParam')">重置</el-button>
             </el-form-item>
         </el-form>
         <el-form style="padding: 0 0 20px">
@@ -79,6 +81,9 @@
                 prop="consignerAddress"
                 width="120"
                 align="center">
+                <template slot-scope="scope">
+                    {{scope.row.consignerAddress + ' | ' + scope.row.consignerHouseNumber}}
+                </template>
             </el-table-column>
             <el-table-column
                 label="收货人"
@@ -94,6 +99,9 @@
                 prop="consigneeAddress"
                 width="120"
                 align="center">
+                <template slot-scope="scope">
+                    {{scope.row.consigneeAddress + ' | ' + scope.row.consigneeHouseNumber}}
+                </template>
             </el-table-column>
             <el-table-column
                 label="取件时间"
@@ -263,6 +271,9 @@
                     //console.log(res.data.value)
                     this.tableData=res.data.value
                 })
+            },
+            resetForm(formName) { //重置
+                this.$refs[formName].resetFields();
             },
             handleSelectionChange(val) {//选中的数据
                 this.multipleSelection = val;
